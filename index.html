@@ -8,9 +8,12 @@
 </head>
 <body>
 <section class="container">
-    <h1>Tamagotchi</h1>
+    <h1>Tama</h1>
     <section class="tamagotchi">
-        <p id="status">Energie: 100 | Honger: 100 </p>
+        <p id="status">Energie: 100 | Honger: 100 | Plezier: 100</p>
+    </section>
+    <section>
+        <img id="tamaImage" src="img/tama-neutral.webp">
     </section>
     <section>
         <button id="voeding">Eten</button>
@@ -18,70 +21,105 @@
         <button id="rusten">Rust</button>
     </section>
 </section>
-
+<section id="chat">
+    <h2>Chat met Tama!</h2>
+    <input type="text" id="ChatBox" placeholder="Typ je bericht...">
+    <button id="verstuur">Verstuur</button>
+</section>
 <script>
 
     //De class Tamagotchi is de "blueprint"
-class Tamagotchi {
-   //Met de constructor maak ik de Tamagotchi
-    constructor(name) {
-        this.name = name;
-        this.age = 1;
+    class Tamagotchi {
+        //Met de constructor maak ik de Tamagotchi
+        constructor(name) {
+            this.name = name;
+            this.age = 1;
+        }
+
+        speak(message) {
+            console.log(`${this.name} zegt: ${message}`); //Hierdoor zegt het hallo
+        }
     }
 
-    speak(message) {
-        console.log(`${this.name} zegt: ${message}`); //Hierdoor zegt het hallo
+    const myPet = new Tamagotchi("Tama"); //Zo benoem ik de Tamagotchi "Tama"
+
+    myPet.speak("Hallo");
+
+    let energie = 100
+    let hunger = 100
+    let plezier = 100
+
+    const status = document.getElementById('status');
+    const voedingButton = document.getElementById('voeding');
+    const spelenButton = document.getElementById('spelen');
+    const rustenButton = document.getElementById('rusten');
+    const tamagotchiImg = document.getElementById('tamaImage');
+
+    //Met deze functie bepaal ik de status en zie je met emoji's ook hoe de tamagotchi zich voelt
+    function updateStatus() {
+        if (hunger >= 100 && energie >= 100 && plezier >= 100) {
+            status.textContent = '😊';
+            tamagotchiImg.src = 'img/tama-blij.png';
+        } else if (hunger >= 60) {
+            status.textContent = '😐';
+            tamagotchiImg.src = 'img/tama-neutral.webp';
+        } else if (hunger >= 35) {
+            status.textContent = '😞';
+            tamagotchiImg.src = 'img/tama-neutral.webp';
+        } else if (hunger >= 15) {
+            status.textContent = '😩';
+            tamagotchiImg.src = 'img/tama-hungry.png';
+        } else if (energie >= 70) {
+            status.textContent = '😌';
+            tamagotchiImg.src = 'img/tama-sleep.webp';
+        } else if (energie >= 50) {
+            status.textContent = '😦';
+            tamagotchiImg.src = 'img.tama-sad.png';
+        } else if (energie >= 20) {
+            status.textContent = '😫';
+            tamagotchiImg.src = 'img/tama-sleepy.png';
+        } else if (plezier >= 90) {
+            status.textContent = '😄'
+            tamagotchiImg.src = 'img/tama-heelblij.webp';
+        } else if (plezier >= 60) {
+            status.textContent = '🙂'
+            tamagotchiImg.src = 'img/tama-blijachtig.webp'
+        } else if (plezier >=30) {
+            status.textContent = '😒'
+            tamagotchiImg.src = 'img/tama-sleep.webp';
+        }
+
+        status.textContent = `Energie: ${energie} | Honger: ${hunger} | Plezier: ${plezier}`;
     }
-}
-
-const myPet = new Tamagotchi("Tama"); //Zo benoem ik de Tamagotchi "Tama"
-
-myPet.speak("Hallo");
-
-let energie = 100
-let hunger = 100
-
-const status = document.getElementById('status');
-const voedingButton = document.getElementById('voeding');
-const spelenButton = document.getElementById('spelen');
-const rustenButton = document.getElementById('rusten');
-
-function updateStatus() {
-    status.textContent =`Energie: ${energie} | Honger: ${hunger}`;
-    // updatestatus();
-}
-
-voedingButton.addEventListener('click', () => {
-    hunger = Math.min(100, hunger + 10); //Hierdoor wordt het getal niet hoger dan 100
-    updateStatus();
-});
-
-spelenButton.addEventListener('click', () => {
-    energie = Math.min(0, energie - 15); //Nu kost spelen energie
-    hunger = Math.min(0, hunger - 10); //Nu zorgt ervoor dat spelen ook hunger vermindert
-    updateStatus();
-});
-
-rustenButton.addEventListener('click', () => {
-    energie = Math.min(100, energie + 20); //Dit zorgt ervoor dat rusten energie verhoogt
-    updateStatus()
-});
-//Met deze functie bepaal ik de status.
-function updateStatus() {
-    if (hunger >= 100 && energie >= 100) {
-        status.textContent = '&#128523';
-    } else if (hunger >= 75) {
-        status.textContent = '&#128531';
-    } else if (hunger >= 50) {
-        status.textContent = '&#128549';
-    } else if (energie >= 75) {
-        status.textContent = '&#128528';
-    } else if (energie >= 50) {
-        status.textContent = '&#128554';
-    } else if (energie >= 20) {
-        status.textContent = '&#128564';
+console.log(tamagotchiImg)
+    function updatestatus() {
+        status.textContent = `Energie: ${energie} | Honger: ${hunger} | Plezier: ${plezier}`;
     }
-}
+
+    voedingButton.addEventListener('click', () => {
+        hunger = Math.min(100, hunger + 10); //Hierdoor wordt het getal niet hoger dan 100
+        updateStatus();
+    });
+
+    spelenButton.addEventListener('click', () => {
+        energie = Math.max(0, energie - 15); //Nu kost spelen energie
+        hunger = Math.max(0, hunger - 20); //Nu zorgt ervoor dat spelen ook hunger vermindert
+        plezier = Math.min(100, plezier + 10);//Spelen verhoogt het plezier
+        updateStatus();
+    });
+
+    rustenButton.addEventListener('click', () => {
+        energie = Math.min(100, energie + 20); //Dit zorgt ervoor dat rusten energie verhoogt
+        plezier = Math.max(0, plezier -25);//Als je slaapt, gaat er plezier van af
+        updateStatus()
+    })
+
+    console.log('Energie:', energie, 'Honger:', hunger, 'Plezier', plezier);
+    console.log('Status:', status.textContent);
+
+    const ChatBox = document.getElementById('ChatBox');
+    const verstuur = document.getElementById('verstuur');
+
 </script>
 </body>
 </html>

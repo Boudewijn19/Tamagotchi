@@ -5,6 +5,10 @@ body {
     background-color: deepskyblue;
 }
 
+h1 {
+    color: #0da60d;
+}
+
 .container {
     margin-top: 50px;
 }
@@ -15,5 +19,15 @@ body {
     display: inline-block;
     padding: 20px;
     margin: 20px;
-    background-color: white;
+    background-color: deepskyblue;
+}
+
+#ChatBox {
+    width: 80%;
+    padding: 10px;
+}
+
+#verstuur {
+    padding: 10px;
+    width: 85px;
 }
