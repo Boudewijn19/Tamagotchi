@@ -27,7 +27,6 @@
     <button id="verstuur">Verstuur</button>
 </section>
 <script>
-
     //De class Tamagotchi is de "blueprint"
     class Tamagotchi {
         //Met de constructor maak ik de Tamagotchi
@@ -37,9 +36,9 @@
         }
 
         speak(message) {
-            console.log(`${this.name} zegt: ${message}`); //Hierdoor zegt het hallo
+            console.log(`${this.name} zegt: ${message}`); //Hierdoor zegt Tama hallo
         }
-    }
+    } //Hulp van ChatGPT
 
     const myPet = new Tamagotchi("Tama"); //Zo benoem ik de Tamagotchi "Tama"
 
@@ -104,7 +103,7 @@ console.log(tamagotchiImg)
     spelenButton.addEventListener('click', () => {
         energie = Math.max(0, energie - 15); //Nu kost spelen energie
         hunger = Math.max(0, hunger - 20); //Nu zorgt ervoor dat spelen ook hunger vermindert
-        plezier = Math.min(100, plezier + 10);//Spelen verhoogt het plezier
+        plezier = Math.min(100, plezier + 15);//Spelen verhoogt het plezier
         updateStatus();
     });
 
@@ -119,6 +118,70 @@ console.log(tamagotchiImg)
 
     const ChatBox = document.getElementById('ChatBox');
     const verstuur = document.getElementById('verstuur');
+
+
+    // Voeg een lijst toe voor de chatberichten
+    const chatList = document.createElement('ul');
+    const chatSection = document.getElementById('chat');
+    chatList.id = 'chatMessages';
+    chatSection.appendChild(chatList);
+
+
+//Hulp van ChatGPT
+    function addChatMessage(sender, message) {
+        const chatMessage = document.createElement('li'); //Dit is een lijstitem
+        chatMessage.textContent = `${sender} ${message}`; //Dit stringt de sender en message aan elkaar
+        chatList.appendChild(chatMessage);
+        chatList.scrollTop = chatList.scrollHeight; // Scroll naar het nieuwste bericht
+    }
+
+
+    //Behulp van ChatGPT
+    verstuur.addEventListener('click', () => {
+        const usermessage = ChatBox.value.trim();
+        if (usermessage) {
+            addChatMessage("Jij", usermessage);
+
+            const tamaResponse = TamaAntwoord(usermessage);
+            addChatMessage("Tama", tamaResponse);
+        }
+    });
+
+    //Dit zorgt ervoor dat je gelijk weer in de chatbox typt als je net een bericht getypt hebt
+    verstuur.addEventListener('click', () => {
+        ChatBox.focus();
+    });
+
+
+    //Door dit kan je met enter je bericht versturen
+    ChatBox.addEventListener('keypress', (event)  => {
+        if (event.key === 'Enter') {
+            verstuur.click();
+        }
+    });
+
+    //Met deze functie zorg ik ervoor dat Tama reageert op mij
+    function TamaAntwoord(usermessage) {
+        if (usermessage.includes("Hallo!")) {
+            return "Hallo! hoe gaat het met jou?";
+        } else if (usermessage.includes("Hoi!")) {
+            return "Hallo!, hoe gaat het met jou?";
+        } else if (usermessage.includes("Hoe gaat het?")) {
+            return "Het gaat heel goed met mij, dankjewel voor het vragen!";
+        } else if (usermessage.include("Met mij gaat het goed, dankjewel voor het vragen")) {
+            return "Dat is goed om te horen!";
+        } else if (usermessage.includes("Vind jij eten lekker?")) {
+            return "Ik houd van eten!";
+        } else if (usermessage.includes("Heb jij honger?")) {
+            return "Ik lust wel wat.";
+        } else if (usermessage.includes("Wil je slapen?")) {
+            return "Tama vindt slapen saai.";
+        } else if (usermessage.includes("Heb je slaap?")) {
+            return "Ik begin wel moe te worden.";
+        } else {
+            return "Ik snap niet wat je tegen mij zegt, maar ik wil wel graag door praten.";
+        }
+    }
 
 </script>
 </body>
