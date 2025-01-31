@@ -7,6 +7,10 @@
     <title>Tamagotchi</title>
 </head>
 <body>
+<audio id="Audio" src="img/Video/IntroSound.mp3" muted autoplay></audio>
+<!--<video id="audioVideo" autoplay loop>-->
+<!--    <source src="./img/Video/IntroSound.mp3" type="audio/mp3">-->
+<!--</video>-->
 <section class="container">
     <h1>Tama</h1>
     <section class="tamagotchi">
@@ -26,7 +30,21 @@
     <input type="text" id="ChatBox" placeholder="Typ je bericht...">
     <button id="verstuur">Verstuur</button>
 </section>
+
 <script>
+    window.onload = function () {
+        let audio = document.getElementById("Audio");
+        let fn = 'IntroSound';
+        let src = './img/Video/' + fn + '.mp3';
+        audio.muted = false;
+        audio.volume = 0.5;
+        audio.src = src;
+        audio.play().catch(error => {
+            console.error('Audio kon niet afgespeeld worden', error);
+            console.log(src);
+        });
+    };
+
     //De class Tamagotchi is de "blueprint"
     class Tamagotchi {
         //Met de constructor maak ik de Tamagotchi
@@ -73,17 +91,17 @@
             tamagotchiImg.src = 'img/tama-sleep.webp';
         } else if (energie >= 50) {
             status.textContent = '😦';
-            tamagotchiImg.src = 'img.tama-sad.png';
+            tamagotchiImg.src = 'img/tama-sad.png';
         } else if (energie >= 20) {
             status.textContent = '😫';
             tamagotchiImg.src = 'img/tama-sleepy.png';
-        } else if (plezier >= 90) {
+        } else if (plezier >= 80) {
             status.textContent = '😄'
             tamagotchiImg.src = 'img/tama-heelblij.webp';
         } else if (plezier >= 60) {
             status.textContent = '🙂'
             tamagotchiImg.src = 'img/tama-blijachtig.webp'
-        } else if (plezier >=30) {
+        } else if (plezier >=20) {
             status.textContent = '😒'
             tamagotchiImg.src = 'img/tama-sleep.webp';
         }
@@ -160,6 +178,11 @@ console.log(tamagotchiImg)
         }
     });
 
+    verstuur.addEventListener('click', () => {
+        ChatBox.value =  '';
+        ChatBox.focus();
+    }); //Hierdoor wist het de vorige message in de chatbox
+
     //Met deze functie zorg ik ervoor dat Tama reageert op mij
     function TamaAntwoord(usermessage) {
         if (usermessage.includes("Hallo!")) {
@@ -168,7 +191,7 @@ console.log(tamagotchiImg)
             return "Hallo!, hoe gaat het met jou?";
         } else if (usermessage.includes("Hoe gaat het?")) {
             return "Het gaat heel goed met mij, dankjewel voor het vragen!";
-        } else if (usermessage.include("Met mij gaat het goed, dankjewel voor het vragen")) {
+        } else if (usermessage.includes("Met mij gaat het goed, dankjewel voor het vragen")) {
             return "Dat is goed om te horen!";
         } else if (usermessage.includes("Vind jij eten lekker?")) {
             return "Ik houd van eten!";
@@ -179,10 +202,28 @@ console.log(tamagotchiImg)
         } else if (usermessage.includes("Heb je slaap?")) {
             return "Ik begin wel moe te worden.";
         } else {
-            return "Ik snap niet wat je tegen mij zegt, maar ik wil wel graag door praten.";
+            return "Ik snap niet wat je tegen mij zegt, maar ik vind praten met jou wel vermakelijk.";
         }
     }
 
+    //Door deze functies wordt de waarden automatisch verlaagt
+    function AutomatischdalenEnergie() {
+        energie  = Math.max(0, energie - 5); //Zorgt ervoor dat het -5 energie is per 10 seconden
+        updatestatus();
+    }
+    setInterval(AutomatischdalenEnergie, 40000);
+
+    function AutomatischdalenHunger() {
+        hunger = Math.max(0, hunger - 10); //Zorgt ervoor dat het -10 hunger is per 10 seconden (nog aanpassen)
+        updatestatus();
+    }
+    setInterval(AutomatischdalenHunger, 35000);
+
+    function AutomatischdalenPlezier() {
+        plezier = Math.max(0, plezier - 15); //Zorgt ervoor dat het -15 plezier is per 15 seconden (nog aanpassen)
+        updatestatus();
+    }
+    setInterval(AutomatischdalenPlezier, 25000);
 </script>
 </body>
 </html>

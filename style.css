@@ -45,3 +45,20 @@ h1 {
     flex-direction: column;
     align-items: flex-start;
 }
+
+#chat {
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+#Audio {
+    display: none;
+}
+
+#audioVideo {
+    display: none;
+}
