@@ -7,15 +7,19 @@
     <title>Tamagotchi</title>
 </head>
 <body>
-<audio id="Audio" src="img/Video/IntroSound.mp3" muted autoplay></audio>
+<audio id="Audio" src="img/Video/IntroSound.mp3" muted></audio>
+
 <!--<video id="audioVideo" autoplay loop>-->
 <!--    <source src="./img/Video/IntroSound.mp3" type="audio/mp3">-->
 <!--</video>-->
+
 <section class="container">
     <h1>Tama</h1>
+
     <section class="tamagotchi">
         <p id="status">Energie: 100 | Honger: 100 | Plezier: 100</p>
     </section>
+
     <section>
         <img id="tamaImage" src="img/tama-neutral.webp">
     </section>
@@ -30,8 +34,25 @@
     <input type="text" id="ChatBox" placeholder="Typ je bericht...">
     <button id="verstuur">Verstuur</button>
 </section>
+<button id="Restart">Restart</button>
+
+<!--<section>-->
+<!--    <button id="StartGame">Start Game</button>-->
+<!--</section>-->
 
 <script>
+    // const StartGameButton = document.getElementById("StartGame");
+    // StartGameButton.addEventListener('click', () => {
+    //     let audio = document.getElementById("Audio");
+    //     audio.muted = muted
+    //     audio.volume = 0.5
+    //     audio.play().catch(error => {
+    //         console.error('Audio kon niet afgespeeld worden', error);
+    //     });
+    //     updateStatus();
+    //     StartGameButton.disabled = true; // De start knop wordt uitgeschakeld als de game start
+    // });
+
     window.onload = function () {
         let audio = document.getElementById("Audio");
         let fn = 'IntroSound';
@@ -100,14 +121,16 @@
         } else if (plezier >= 60) {
             status.textContent = '🙂'
             tamagotchiImg.src = 'img/tama-blijachtig.webp'
-        } else if (plezier >=20) {
+        } else if (plezier >= 20) {
             status.textContent = '😒'
             tamagotchiImg.src = 'img/tama-sleep.webp';
         }
 
         status.textContent = `Energie: ${energie} | Honger: ${hunger} | Plezier: ${plezier}`;
     }
-console.log(tamagotchiImg)
+
+    console.log(tamagotchiImg)
+
     function updatestatus() {
         status.textContent = `Energie: ${energie} | Honger: ${hunger} | Plezier: ${plezier}`;
     }
@@ -126,7 +149,7 @@ console.log(tamagotchiImg)
 
     rustenButton.addEventListener('click', () => {
         energie = Math.min(100, energie + 20); //Dit zorgt ervoor dat rusten energie verhoogt
-        plezier = Math.max(0, plezier -25);//Als je slaapt, gaat er plezier van af
+        plezier = Math.max(0, plezier - 25);//Als je slaapt, gaat er plezier van af
         updateStatus()
     })
 
@@ -144,7 +167,7 @@ console.log(tamagotchiImg)
     chatSection.appendChild(chatList);
 
 
-//Hulp van ChatGPT
+    //Hulp van ChatGPT
     function addChatMessage(sender, message) {
         const chatMessage = document.createElement('li'); //Dit is een lijstitem
         chatMessage.textContent = `${sender} ${message}`; //Dit stringt de sender en message aan elkaar
@@ -171,14 +194,14 @@ console.log(tamagotchiImg)
 
 
     //Door dit kan je met enter je bericht versturen
-    ChatBox.addEventListener('keypress', (event)  => {
+    ChatBox.addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             verstuur.click();
         }
     });
 
     verstuur.addEventListener('click', () => {
-        ChatBox.value =  '';
+        ChatBox.value = '';
         ChatBox.focus();
     }); //Hierdoor wist het de vorige message in de chatbox
 
@@ -207,22 +230,60 @@ console.log(tamagotchiImg)
 
     //Door deze functies wordt de waarden automatisch verlaagt
     function AutomatischdalenEnergie() {
-        energie  = Math.max(0, energie - 5); //Zorgt ervoor dat het -5 energie is per 10 seconden
+        energie = Math.max(0, energie - 5); //Zorgt ervoor dat het -5 energie is
         updatestatus();
     }
-    setInterval(AutomatischdalenEnergie, 40000);
+
+    setInterval(AutomatischdalenEnergie, 60000); //60 seconden
 
     function AutomatischdalenHunger() {
-        hunger = Math.max(0, hunger - 10); //Zorgt ervoor dat het -10 hunger is per 10 seconden (nog aanpassen)
+        hunger = Math.max(0, hunger - 10); //Zorgt ervoor dat het -10 hunger is
         updatestatus();
     }
-    setInterval(AutomatischdalenHunger, 35000);
+
+    setInterval(AutomatischdalenHunger, 80000); //80 seconden
 
     function AutomatischdalenPlezier() {
-        plezier = Math.max(0, plezier - 15); //Zorgt ervoor dat het -15 plezier is per 15 seconden (nog aanpassen)
+        plezier = Math.max(0, plezier - 15); //Zorgt ervoor dat het -15 plezier is
         updatestatus();
     }
-    setInterval(AutomatischdalenPlezier, 25000);
+
+    setInterval(AutomatischdalenPlezier, 50000); //50 seconden
+
+    //Als alles op 0 is is het game over
+    function GameOver() {
+        if (energie === 0 || hunger === 0 || plezier === 0) {
+            alert("Game Over! Je hebt Tama Verwaarloosd...");
+            voedingButton.disabled = true;
+            spelenButton.disabled = true;
+            rustenButton.disabled = true;
+            ChatBox.disabled = true;
+            verstuur.disabled = true;
+            tamagotchiImg.src = 'img/game-over.jpg';
+            const restartButton = document.getElementById('Restart');
+            restartButton.style.display = 'block';  // Zorgt ervoor dat de knop zichtbaar wordt
+        }
+    }
+
+    // Controleert als de statussen op 0 is dat het gam over is
+    function updateStatus() {
+        status.textContent = `Energie: ${energie} | Honger: ${hunger} | Plezier: ${plezier}`;
+        GameOver();
+    }
+
+    const RestartButton = document.getElementById("Restart");
+    RestartButton.addEventListener("click", () => {
+        energie = 100
+        hunger = 100
+        plezier = 100
+        tamagotchiImg.src = 'img/tama-neutral.webp';
+        updatestatus();
+        console.log("Game is opnieuw begonnen!");
+    });
+
+    RestartButton.addEventListener("click", () => {
+        location.reload();
+    });
 </script>
 </body>
 </html>
