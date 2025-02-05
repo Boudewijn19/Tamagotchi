@@ -45,7 +45,6 @@
         });
     };
 
-    //De class Tamagotchi is de "blueprint"
     class Tamagotchi {
         //Met de constructor maak ik de Tamagotchi
         constructor(name) {
@@ -58,9 +57,9 @@
         }
     } //Hulp van ChatGPT
 
-    const myPet = new Tamagotchi("Tama"); //Zo benoem ik de Tamagotchi "Tama"
+    const myTama = new Tamagotchi("Tama"); //Zo benoem ik de Tamagotchi "Tama"
 
-    myPet.speak("Hallo");
+    myTama.speak("Hallo");
 
     let energie = 100
     let hunger = 100
@@ -188,7 +187,7 @@ console.log(tamagotchiImg)
         if (usermessage.includes("Hallo!")) {
             return "Hallo! hoe gaat het met jou?";
         } else if (usermessage.includes("Hoi!")) {
-            return "Hallo!, hoe gaat het met jou?";
+            return "Hallo! hoe gaat het met jou?";
         } else if (usermessage.includes("Hoe gaat het?")) {
             return "Het gaat heel goed met mij, dankjewel voor het vragen!";
         } else if (usermessage.includes("Met mij gaat het goed, dankjewel voor het vragen")) {
